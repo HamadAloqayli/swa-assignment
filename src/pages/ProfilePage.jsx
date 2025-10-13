@@ -1,0 +1,148 @@
+import { user } from "../data/mockData";
+import { Mail, Phone, Briefcase, User as UserIcon } from "lucide-react";
+
+const ProfilePage = () => {
+  return (
+    <div className="space-y-8 animate-fadeIn">
+      {/* Page Header */}
+      <div className="bg-gradient-to-r from-primary-600 to-primary-800 rounded-2xl shadow-xl p-8 text-white">
+        <h1 className="text-4xl font-bold">الملف الشخصي</h1>
+        <p className="text-primary-100 mt-2">معلوماتك الشخصية والوظيفية</p>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Profile Card */}
+        <div className="lg:col-span-1">
+          <div className="card p-8">
+            <div className="flex flex-col items-center">
+              <div className="relative mb-6">
+                <img
+                  src={user.avatar}
+                  alt={user.name}
+                  className="w-36 h-36 rounded-full shadow-lg ring-4 ring-primary-100"
+                />
+                <div className="absolute bottom-0 right-0 w-10 h-10 bg-green-500 rounded-full border-4 border-white flex items-center justify-center">
+                  <span className="text-white text-xs font-bold">✓</span>
+                </div>
+              </div>
+              <h2 className="text-2xl font-bold text-gray-800">{user.name}</h2>
+              <p className="text-primary-600 font-medium mt-2">
+                {user.position}
+              </p>
+              <div className="mt-6 w-full border-t pt-6">
+                <div className="space-y-4">
+                  <div className="flex items-center gap-3 text-gray-700 bg-gray-50 p-3 rounded-lg">
+                    <Briefcase size={20} className="text-primary-600" />
+                    <span className="font-medium">{user.department}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Contact Information */}
+        <div className="lg:col-span-2 space-y-6">
+          <div className="card p-6">
+            <h3 className="text-xl font-bold text-gray-800 mb-6 pb-3 border-b border-gray-200">
+              معلومات الاتصال
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="flex items-start gap-4 p-4 bg-gradient-to-br from-primary-50 to-white rounded-xl hover:shadow-md transition-shadow duration-200">
+                <div className="bg-gradient-to-br from-primary-500 to-primary-600 p-3 rounded-xl shadow-lg">
+                  <Mail className="text-white" size={24} />
+                </div>
+                <div>
+                  <p className="text-sm text-gray-500 font-medium">
+                    البريد الإلكتروني
+                  </p>
+                  <p className="text-base text-gray-800 mt-1 font-medium">
+                    {user.email}
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-4 p-4 bg-gradient-to-br from-green-50 to-white rounded-xl hover:shadow-md transition-shadow duration-200">
+                <div className="bg-gradient-to-br from-green-500 to-green-600 p-3 rounded-xl shadow-lg">
+                  <Phone className="text-white" size={24} />
+                </div>
+                <div>
+                  <p className="text-sm text-gray-500 font-medium">
+                    رقم الهاتف
+                  </p>
+                  <p className="text-base text-gray-800 mt-1 font-medium">
+                    {user.phone}
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-4 p-4 bg-gradient-to-br from-purple-50 to-white rounded-xl hover:shadow-md transition-shadow duration-200">
+                <div className="bg-gradient-to-br from-purple-500 to-purple-600 p-3 rounded-xl shadow-lg">
+                  <UserIcon className="text-white" size={24} />
+                </div>
+                <div>
+                  <p className="text-sm text-gray-500 font-medium">
+                    المسمى الوظيفي
+                  </p>
+                  <p className="text-base text-gray-800 mt-1 font-medium">
+                    {user.position}
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-4 p-4 bg-gradient-to-br from-blue-50 to-white rounded-xl hover:shadow-md transition-shadow duration-200">
+                <div className="bg-gradient-to-br from-blue-500 to-blue-600 p-3 rounded-xl shadow-lg">
+                  <Briefcase className="text-white" size={24} />
+                </div>
+                <div>
+                  <p className="text-sm text-gray-500 font-medium">الإدارة</p>
+                  <p className="text-base text-gray-800 mt-1 font-medium">
+                    {user.department}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Additional Information */}
+          <div className="card p-6">
+            <h3 className="text-xl font-bold text-gray-800 mb-6 pb-3 border-b border-gray-200">
+              معلومات إضافية
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="p-4 bg-gray-50 rounded-xl">
+                <p className="text-sm text-gray-500 font-medium">
+                  تاريخ الانضمام
+                </p>
+                <p className="text-lg text-gray-800 mt-2 font-bold">
+                  ٢٠٢٣/٠١/١٥
+                </p>
+              </div>
+              <div className="p-4 bg-green-50 rounded-xl">
+                <p className="text-sm text-gray-500 font-medium">حالة الحساب</p>
+                <div className="flex items-center gap-2 mt-2">
+                  <span className="w-2 h-2 rounded-full bg-green-500"></span>
+                  <p className="text-lg text-green-600 font-bold">نشط</p>
+                </div>
+              </div>
+              <div className="p-4 bg-gray-50 rounded-xl">
+                <p className="text-sm text-gray-500 font-medium">رقم الموظف</p>
+                <p className="text-lg text-gray-800 mt-2 font-bold">
+                  EMP-2023-001
+                </p>
+              </div>
+              <div className="p-4 bg-primary-50 rounded-xl">
+                <p className="text-sm text-gray-500 font-medium">الصلاحيات</p>
+                <p className="text-lg text-primary-600 mt-2 font-bold">
+                  مدير نظام
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default ProfilePage;
