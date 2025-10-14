@@ -321,20 +321,20 @@ const Dashboard = () => {
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
         <div className="stat-card border-r-4 border-primary-500 bg-gradient-to-br from-white to-primary-50">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-gray-600 text-sm font-medium">
+              <p className="text-gray-600 text-xs md:text-sm font-medium">
                 إجمالي الوثائق
               </p>
-              <p className="text-4xl font-bold text-gray-800 mt-2">
+              <p className="text-3xl md:text-4xl font-bold text-gray-800 mt-2">
                 {totalStats.underProcess + totalStats.late + totalStats.closed}
               </p>
               <p className="text-xs text-gray-500 mt-1">جميع الإدارات</p>
             </div>
-            <div className="bg-gradient-to-br from-primary-500 to-primary-600 p-4 rounded-xl shadow-lg">
-              <FileText className="text-white" size={28} />
+            <div className="bg-gradient-to-br from-primary-500 to-primary-600 p-3 md:p-4 rounded-xl shadow-lg">
+              <FileText className="text-white" size={24} />
             </div>
           </div>
         </div>
@@ -342,14 +342,16 @@ const Dashboard = () => {
         <div className="stat-card border-r-4 border-blue-400 bg-gradient-to-br from-white to-blue-50">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-gray-600 text-sm font-medium">قيد المعالجة</p>
-              <p className="text-4xl font-bold text-blue-600 mt-2">
+              <p className="text-gray-600 text-xs md:text-sm font-medium">
+                قيد المعالجة
+              </p>
+              <p className="text-3xl md:text-4xl font-bold text-blue-600 mt-2">
                 {totalStats.underProcess}
               </p>
               <p className="text-xs text-gray-500 mt-1">وثيقة نشطة</p>
             </div>
-            <div className="bg-gradient-to-br from-blue-400 to-blue-600 p-4 rounded-xl shadow-lg">
-              <Clock className="text-white" size={28} />
+            <div className="bg-gradient-to-br from-blue-400 to-blue-600 p-3 md:p-4 rounded-xl shadow-lg">
+              <Clock className="text-white" size={24} />
             </div>
           </div>
         </div>
@@ -357,14 +359,16 @@ const Dashboard = () => {
         <div className="stat-card border-r-4 border-red-400 bg-gradient-to-br from-white to-red-50">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-gray-600 text-sm font-medium">متأخرة</p>
-              <p className="text-4xl font-bold text-red-600 mt-2">
+              <p className="text-gray-600 text-xs md:text-sm font-medium">
+                متأخرة
+              </p>
+              <p className="text-3xl md:text-4xl font-bold text-red-600 mt-2">
                 {totalStats.late}
               </p>
               <p className="text-xs text-gray-500 mt-1">تحتاج متابعة</p>
             </div>
-            <div className="bg-gradient-to-br from-red-400 to-red-600 p-4 rounded-xl shadow-lg">
-              <AlertCircle className="text-white" size={28} />
+            <div className="bg-gradient-to-br from-red-400 to-red-600 p-3 md:p-4 rounded-xl shadow-lg">
+              <AlertCircle className="text-white" size={24} />
             </div>
           </div>
         </div>
@@ -372,83 +376,89 @@ const Dashboard = () => {
         <div className="stat-card border-r-4 border-green-400 bg-gradient-to-br from-white to-green-50">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-gray-600 text-sm font-medium">مغلقة</p>
-              <p className="text-4xl font-bold text-green-600 mt-2">
+              <p className="text-gray-600 text-xs md:text-sm font-medium">
+                مغلقة
+              </p>
+              <p className="text-3xl md:text-4xl font-bold text-green-600 mt-2">
                 {totalStats.closed}
               </p>
               <p className="text-xs text-gray-500 mt-1">تم الانتهاء</p>
             </div>
-            <div className="bg-gradient-to-br from-green-400 to-green-600 p-4 rounded-xl shadow-lg">
-              <CheckCircle className="text-white" size={28} />
+            <div className="bg-gradient-to-br from-green-400 to-green-600 p-3 md:p-4 rounded-xl shadow-lg">
+              <CheckCircle className="text-white" size={24} />
             </div>
           </div>
         </div>
       </div>
 
       {/* Charts Section */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
         {/* Bar Chart */}
-        <div className="card p-6">
-          <div className="flex items-center justify-between mb-6">
+        <div className="card p-4 md:p-6">
+          <div className="flex items-center justify-between mb-4 md:mb-6">
             <div>
-              <h2 className="text-xl font-bold text-gray-800">
+              <h2 className="text-lg md:text-xl font-bold text-gray-800">
                 إحصائيات الإدارات
               </h2>
-              <p className="text-sm text-gray-500 mt-1">
+              <p className="text-xs md:text-sm text-gray-500 mt-1">
                 توزيع الوثائق حسب الحالة
               </p>
             </div>
           </div>
-          <div style={{ height: "380px" }}>
+          <div className="w-full" style={{ height: "300px" }}>
             <Bar data={barChartData} options={chartOptions} />
           </div>
         </div>
 
         {/* Pie Chart */}
-        <div className="card p-6">
-          <div className="flex items-center justify-between mb-6">
+        <div className="card p-4 md:p-6">
+          <div className="flex items-center justify-between mb-4 md:mb-6">
             <div>
-              <h2 className="text-xl font-bold text-gray-800">
+              <h2 className="text-lg md:text-xl font-bold text-gray-800">
                 توزيع الوثائق حسب الإدارة
               </h2>
-              <p className="text-sm text-gray-500 mt-1">
+              <p className="text-xs md:text-sm text-gray-500 mt-1">
                 النسب المئوية لكل إدارة
               </p>
             </div>
           </div>
-          <div style={{ height: "380px" }}>
+          <div className="w-full" style={{ height: "300px" }}>
             <Pie data={pieChartData} options={pieOptions} />
           </div>
         </div>
       </div>
 
       {/* Line Chart */}
-      <div className="card p-6">
-        <div className="flex items-center justify-between mb-6">
+      <div className="card p-4 md:p-6">
+        <div className="flex items-center justify-between mb-4 md:mb-6">
           <div>
-            <h2 className="text-xl font-bold text-gray-800">اتجاه الوثائق</h2>
-            <p className="text-sm text-gray-500 mt-1">
+            <h2 className="text-lg md:text-xl font-bold text-gray-800">
+              اتجاه الوثائق
+            </h2>
+            <p className="text-xs md:text-sm text-gray-500 mt-1">
               توزيع الوثائق حسب الحالة لكل إدارة
             </p>
           </div>
         </div>
-        <div style={{ height: "380px" }}>
+        <div className="w-full" style={{ height: "300px" }}>
           <Line data={lineChartData} options={chartOptions} />
         </div>
       </div>
 
       {/* Department Summary */}
-      <div className="card p-6">
-        <div className="flex items-center justify-between mb-6">
+      <div className="card p-4 md:p-6">
+        <div className="flex items-center justify-between mb-4 md:mb-6">
           <div>
-            <h2 className="text-xl font-bold text-gray-800">ملخص الإدارات</h2>
-            <p className="text-sm text-gray-500 mt-1">
+            <h2 className="text-lg md:text-xl font-bold text-gray-800">
+              ملخص الإدارات
+            </h2>
+            <p className="text-xs md:text-sm text-gray-500 mt-1">
               تفاصيل شاملة لجميع الإدارات
             </p>
           </div>
         </div>
-        <div className="overflow-x-auto rounded-lg border border-gray-200">
-          <table className="w-full">
+        <div className="overflow-x-auto rounded-lg border border-gray-200 -mx-4 md:mx-0">
+          <table className="w-full min-w-[600px]">
             <thead className="bg-gradient-to-r from-primary-50 to-primary-100">
               <tr>
                 <th className="table-header">الإدارة</th>

@@ -171,21 +171,21 @@ const DepartmentPage = ({ department, icon: Icon }) => {
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
         <div className="stat-card border-r-4 border-primary-500 bg-gradient-to-br from-white to-primary-50">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-gray-600 text-sm font-medium">
+              <p className="text-gray-600 text-xs md:text-sm font-medium">
                 إجمالي الوثائق
               </p>
-              <p className="text-4xl font-bold text-gray-800 mt-2">
+              <p className="text-3xl md:text-4xl font-bold text-gray-800 mt-2">
                 {department.under_process_documents +
                   department.under_process_late_documents +
                   department.closed_documents}
               </p>
             </div>
-            <div className="bg-gradient-to-br from-primary-500 to-primary-600 p-4 rounded-xl shadow-lg">
-              <FileText className="text-white" size={28} />
+            <div className="bg-gradient-to-br from-primary-500 to-primary-600 p-3 md:p-4 rounded-xl shadow-lg">
+              <FileText className="text-white" size={24} />
             </div>
           </div>
         </div>
@@ -193,13 +193,15 @@ const DepartmentPage = ({ department, icon: Icon }) => {
         <div className="stat-card border-r-4 border-blue-400 bg-gradient-to-br from-white to-blue-50">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-gray-600 text-sm font-medium">قيد المعالجة</p>
-              <p className="text-4xl font-bold text-blue-600 mt-2">
+              <p className="text-gray-600 text-xs md:text-sm font-medium">
+                قيد المعالجة
+              </p>
+              <p className="text-3xl md:text-4xl font-bold text-blue-600 mt-2">
                 {department.under_process_documents}
               </p>
             </div>
-            <div className="bg-gradient-to-br from-blue-400 to-blue-600 p-4 rounded-xl shadow-lg">
-              <Clock className="text-white" size={28} />
+            <div className="bg-gradient-to-br from-blue-400 to-blue-600 p-3 md:p-4 rounded-xl shadow-lg">
+              <Clock className="text-white" size={24} />
             </div>
           </div>
         </div>
@@ -207,13 +209,15 @@ const DepartmentPage = ({ department, icon: Icon }) => {
         <div className="stat-card border-r-4 border-red-400 bg-gradient-to-br from-white to-red-50">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-gray-600 text-sm font-medium">متأخرة</p>
-              <p className="text-4xl font-bold text-red-600 mt-2">
+              <p className="text-gray-600 text-xs md:text-sm font-medium">
+                متأخرة
+              </p>
+              <p className="text-3xl md:text-4xl font-bold text-red-600 mt-2">
                 {department.under_process_late_documents}
               </p>
             </div>
-            <div className="bg-gradient-to-br from-red-400 to-red-600 p-4 rounded-xl shadow-lg">
-              <AlertCircle className="text-white" size={28} />
+            <div className="bg-gradient-to-br from-red-400 to-red-600 p-3 md:p-4 rounded-xl shadow-lg">
+              <AlertCircle className="text-white" size={24} />
             </div>
           </div>
         </div>
@@ -221,33 +225,36 @@ const DepartmentPage = ({ department, icon: Icon }) => {
         <div className="stat-card border-r-4 border-green-400 bg-gradient-to-br from-white to-green-50">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-gray-600 text-sm font-medium">مغلقة</p>
-              <p className="text-4xl font-bold text-green-600 mt-2">
+              <p className="text-gray-600 text-xs md:text-sm font-medium">
+                مغلقة
+              </p>
+              <p className="text-3xl md:text-4xl font-bold text-green-600 mt-2">
                 {department.closed_documents}
               </p>
             </div>
-            <div className="bg-gradient-to-br from-green-400 to-green-600 p-4 rounded-xl shadow-lg">
-              <CheckCircle className="text-white" size={28} />
+            <div className="bg-gradient-to-br from-green-400 to-green-600 p-3 md:p-4 rounded-xl shadow-lg">
+              <CheckCircle className="text-white" size={24} />
             </div>
           </div>
         </div>
       </div>
 
       {/* Filter Section */}
-      <div className="card p-6">
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-semibold text-gray-800">
+      <div className="card p-4 md:p-6">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4 gap-3">
+          <h3 className="text-base md:text-lg font-semibold text-gray-800">
             البحث والتصفية
           </h3>
           <button
             onClick={handleExport}
-            className="btn-primary flex items-center gap-2"
+            className="btn-primary flex items-center gap-2 text-sm md:text-base px-4 md:px-6 w-full sm:w-auto justify-center"
           >
-            <Download size={20} />
-            تصدير Excel
+            <Download size={18} className="md:w-5 md:h-5" />
+            <span className="hidden sm:inline">تصدير Excel</span>
+            <span className="sm:hidden">تصدير</span>
           </button>
         </div>
-        <div className="flex flex-col md:flex-row gap-4">
+        <div className="flex flex-col gap-4">
           {/* Search */}
           <div className="flex-1">
             <div className="relative">
@@ -266,9 +273,9 @@ const DepartmentPage = ({ department, icon: Icon }) => {
           </div>
 
           {/* Sort */}
-          <div className="flex gap-2">
+          <div className="flex gap-2 w-full">
             <select
-              className="input-field bg-white min-w-[160px]"
+              className="input-field bg-white flex-1 text-sm md:text-base"
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value)}
             >
@@ -278,12 +285,12 @@ const DepartmentPage = ({ department, icon: Icon }) => {
               <option value="expired_at">تاريخ الانتهاء</option>
             </select>
             <button
-              className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-primary-50 hover:border-primary-300 transition-all duration-200"
+              className="px-3 md:px-4 py-2 border border-gray-300 rounded-lg hover:bg-primary-50 hover:border-primary-300 transition-all duration-200"
               onClick={() => setSortOrder(sortOrder === "asc" ? "desc" : "asc")}
-              title={sortOrder === "asc" ? "تصاعدي" : "تنازلي"}
+              title={sortOrder === "اsc" ? "تصاعدي" : "تنازلي"}
             >
               <ArrowUpDown
-                size={20}
+                size={18}
                 className={
                   sortOrder === "desc"
                     ? "rotate-180 transition-transform"
@@ -294,10 +301,10 @@ const DepartmentPage = ({ department, icon: Icon }) => {
           </div>
 
           {/* Filter */}
-          <div className="flex gap-2 items-center">
-            <Filter size={20} className="text-primary-600" />
+          <div className="flex gap-2 items-center w-full">
+            <Filter size={18} className="text-primary-600 hidden sm:block" />
             <select
-              className="input-field bg-white min-w-[140px]"
+              className="input-field bg-white flex-1 text-sm md:text-base"
               value={filterStatus}
               onChange={(e) => setFilterStatus(e.target.value)}
             >
@@ -312,18 +319,18 @@ const DepartmentPage = ({ department, icon: Icon }) => {
 
       {/* Table Section */}
       <div className="card overflow-hidden">
-        <div className="bg-gradient-to-r from-primary-600 to-primary-700 px-6 py-4 flex items-center justify-between">
-          <h3 className="text-lg font-semibold text-white">
+        <div className="bg-gradient-to-r from-primary-600 to-primary-700 px-4 md:px-6 py-3 md:py-4 flex items-center justify-between">
+          <h3 className="text-base md:text-lg font-semibold text-white">
             الوثائق ({filteredDocuments.length})
           </h3>
           {filteredDocuments.length > 0 && (
-            <span className="text-sm text-primary-100">
-              الصفحة {currentPage} من {totalPages}
+            <span className="text-xs md:text-sm text-primary-100">
+              {currentPage}/{totalPages}
             </span>
           )}
         </div>
         <div className="overflow-x-auto">
-          <table className="w-full">
+          <table className="w-full min-w-[800px]">
             <thead className="bg-gradient-to-r from-primary-50 to-primary-100">
               <tr>
                 <th

@@ -13,7 +13,7 @@ import {
 import { user } from "../data/mockData";
 import logo from "../assets/swa_logo.jpg";
 
-const Sidebar = () => {
+const Sidebar = ({ onClose }) => {
   const location = useLocation();
 
   const menuItems = [
@@ -30,7 +30,7 @@ const Sidebar = () => {
   const isActive = (path) => location.pathname === path;
 
   return (
-    <div className="h-screen w-64 bg-white flex flex-col shadow-xl border-l border-gray-200 sticky top-0">
+    <div className="h-screen w-64 bg-white flex flex-col shadow-xl border-l border-gray-200">
       {/* Logo */}
       <div className="p-6 border-b border-gray-200">
         <div className="flex items-center justify-center mb-3">
@@ -50,6 +50,7 @@ const Sidebar = () => {
           <Link
             key={item.path}
             to={item.path}
+            onClick={onClose}
             className={`flex items-center gap-3 px-4 py-4 mb-2 rounded-lg transition-all duration-200 group ${
               isActive(item.path)
                 ? "bg-primary-50 text-primary-600 font-semibold"
@@ -73,6 +74,7 @@ const Sidebar = () => {
       <div className="border-t border-gray-200 p-3">
         <Link
           to="/profile"
+          onClick={onClose}
           className={`flex items-center gap-3 px-4 py-4 rounded-lg transition-all duration-200 group ${
             isActive("/profile")
               ? "bg-primary-50 text-primary-600"
@@ -91,7 +93,7 @@ const Sidebar = () => {
             </div>
             <div className="absolute bottom-0 left-0 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></div>
           </div>
-          <div className="flex-1 min-w-0">
+          <div className="flex-1 min-w-0 py-1">
             <p
               className={`text-sm font-semibold truncate ${
                 isActive("/profile") ? "text-primary-600" : "text-gray-800"
