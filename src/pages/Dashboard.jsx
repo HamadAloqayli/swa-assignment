@@ -20,7 +20,14 @@ import {
   ResponsiveContainer,
   Cell,
 } from "recharts";
-import { FileText, Clock, CheckCircle, AlertCircle } from "lucide-react";
+import {
+  FileText,
+  Clock,
+  CheckCircle,
+  AlertCircle,
+  Download,
+} from "lucide-react";
+import * as XLSX from "xlsx";
 
 const Dashboard = () => {
   // Combine all departments
@@ -72,14 +79,50 @@ const Dashboard = () => {
     "#1d4ed8",
   ];
 
+  const handleExportSummary = () => {
+    // Prepare summary data for export
+    const exportData = departments.map((dept) => ({
+      الإدارة: dept.dept_name_ar,
+      "رقم الإدارة": dept.dept_no,
+      "قيد المعالجة": dept.under_process_documents,
+      متأخرة: dept.under_process_late_documents,
+      مغلقة: dept.closed_documents,
+      الإجمالي: dept.under_process_documents + dept.closed_documents,
+    }));
+
+    // Create workbook and worksheet
+    const ws = XLSX.utils.json_to_sheet(exportData);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "ملخص الإدارات");
+
+    // Generate file name with date
+    const fileName = `ملخص_الإدارات_${new Date().toLocaleDateString(
+      "ar-SA"
+    )}.xlsx`;
+
+    // Export file
+    XLSX.writeFile(wb, fileName);
+  };
+
   return (
     <div className="space-y-8 animate-fadeIn">
       {/* Page Header */}
       <div className="bg-gradient-to-r from-primary-600 to-primary-800 rounded-2xl shadow-xl p-8 text-white">
-        <h1 className="text-4xl font-bold">لوحة التحكم</h1>
-        <p className="text-primary-100 mt-2">
-          نظرة عامة على جميع الإدارات والوثائق
-        </p>
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-4xl font-bold">لوحة التحكم</h1>
+            <p className="text-primary-100 mt-2">
+              نظرة عامة على جميع الإدارات والوثائق
+            </p>
+          </div>
+          <button
+            onClick={handleExportSummary}
+            className="bg-white text-primary-600 px-6 py-3 rounded-lg font-medium hover:bg-primary-50 transition-all duration-200 flex items-center gap-2 shadow-lg"
+          >
+            <Download size={20} />
+            تصدير الملخص
+          </button>
+        </div>
       </div>
 
       {/* Stats Cards */}

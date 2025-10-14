@@ -7,7 +7,9 @@ import {
   Search,
   Filter,
   ArrowUpDown,
+  Download,
 } from "lucide-react";
+import * as XLSX from "xlsx";
 import Pagination from "../components/Pagination";
 
 const DepartmentPage = ({ department }) => {
@@ -111,6 +113,36 @@ const DepartmentPage = ({ department }) => {
     }
   };
 
+  const handleExport = () => {
+    // Prepare data for export
+    const exportData = filteredDocuments.map((doc) => ({
+      "رقم الوثيقة": doc.document_number,
+      الموضوع: doc.subject,
+      الوصف: doc.description,
+      "تاريخ الإنشاء": doc.created_at,
+      "تاريخ الانتهاء": doc.expired_at,
+      "تاريخ الإغلاق": doc.closed_at || "-",
+      الحالة: doc.closed_at
+        ? "مغلقة"
+        : new Date(doc.expired_at) < new Date()
+        ? "متأخرة"
+        : "قيد المعالجة",
+    }));
+
+    // Create workbook and worksheet
+    const ws = XLSX.utils.json_to_sheet(exportData);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, department.dept_name_ar);
+
+    // Generate file name with department name and date
+    const fileName = `${
+      department.dept_name_ar
+    }_${new Date().toLocaleDateString("ar-SA")}.xlsx`;
+
+    // Export file
+    XLSX.writeFile(wb, fileName);
+  };
+
   return (
     <div className="space-y-8 animate-fadeIn">
       {/* Page Header */}
@@ -186,9 +218,18 @@ const DepartmentPage = ({ department }) => {
 
       {/* Filter Section */}
       <div className="card p-6">
-        <h3 className="text-lg font-semibold text-gray-800 mb-4">
-          البحث والتصفية
-        </h3>
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-lg font-semibold text-gray-800">
+            البحث والتصفية
+          </h3>
+          <button
+            onClick={handleExport}
+            className="btn-primary flex items-center gap-2"
+          >
+            <Download size={20} />
+            تصدير Excel
+          </button>
+        </div>
         <div className="flex flex-col md:flex-row gap-4">
           {/* Search */}
           <div className="flex-1">
