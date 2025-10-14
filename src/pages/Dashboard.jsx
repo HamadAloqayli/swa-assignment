@@ -5,31 +5,53 @@ import { law } from "../data/law";
 import { pmo } from "../data/pmo";
 import { cyber } from "../data/cyber";
 import { audit } from "../data/audit";
+import { useNavigate } from "react-router-dom";
 import {
-  BarChart,
-  Bar,
-  PieChart,
-  Pie,
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  PointElement,
+  LineElement,
+  ArcElement,
+  Title,
   Tooltip,
   Legend,
-  ResponsiveContainer,
-  Cell,
-} from "recharts";
+} from "chart.js";
+import { Bar, Pie, Line } from "react-chartjs-2";
 import {
+  LayoutDashboard,
   FileText,
   Clock,
   CheckCircle,
   AlertCircle,
   Download,
+  Monitor,
+  Users,
+  DollarSign,
+  Scale,
+  Briefcase,
+  Shield,
+  FileCheck,
 } from "lucide-react";
 import * as XLSX from "xlsx";
 
+// Register Chart.js components
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  PointElement,
+  LineElement,
+  ArcElement,
+  Title,
+  Tooltip,
+  Legend
+);
+
 const Dashboard = () => {
+  const navigate = useNavigate();
+
   // Combine all departments
   const departments = [
     it[0],
@@ -41,6 +63,17 @@ const Dashboard = () => {
     audit[0],
   ];
 
+  // Department icons and routes mapping
+  const departmentConfig = {
+    IT: { icon: Monitor, route: "/it" },
+    HR: { icon: Users, route: "/hr" },
+    Finance: { icon: DollarSign, route: "/finance" },
+    "Law And Governance": { icon: Scale, route: "/law" },
+    PMO: { icon: Briefcase, route: "/pmo" },
+    "Cyber Security": { icon: Shield, route: "/cyber" },
+    "Internal Audit": { icon: FileCheck, route: "/audit" },
+  };
+
   // Calculate total stats
   const totalStats = departments.reduce(
     (acc, dept) => ({
@@ -51,33 +84,181 @@ const Dashboard = () => {
     { underProcess: 0, late: 0, closed: 0 }
   );
 
-  // Prepare data for charts
-  const barChartData = departments.map((dept) => ({
-    name: dept.dept_name_ar,
-    "قيد المعالجة": dept.under_process_documents,
-    متأخرة: dept.under_process_late_documents,
-    مغلقة: dept.closed_documents,
-  }));
+  // Prepare data for Chart.js
+  const labels = departments.map((dept) => dept.dept_name_ar);
 
-  const pieChartData = departments.map((dept) => ({
-    name: dept.dept_name_ar,
-    value: dept.under_process_documents + dept.closed_documents,
-  }));
+  const barChartData = {
+    labels,
+    datasets: [
+      {
+        label: "قيد المعالجة",
+        data: departments.map((dept) => dept.under_process_documents),
+        backgroundColor: "#3b82f6",
+        borderRadius: 8,
+      },
+      {
+        label: "متأخرة",
+        data: departments.map((dept) => dept.under_process_late_documents),
+        backgroundColor: "#ef4444",
+        borderRadius: 8,
+      },
+      {
+        label: "مغلقة",
+        data: departments.map((dept) => dept.closed_documents),
+        backgroundColor: "#10b981",
+        borderRadius: 8,
+      },
+    ],
+  };
 
-  const lineChartData = departments.map((dept, index) => ({
-    name: dept.dept_name_ar,
-    الوثائق: dept.under_process_documents + dept.closed_documents,
-  }));
+  const pieChartData = {
+    labels,
+    datasets: [
+      {
+        data: departments.map(
+          (dept) =>
+            dept.under_process_documents +
+            dept.under_process_late_documents +
+            dept.closed_documents
+        ),
+        backgroundColor: [
+          "#2563eb",
+          "#3b82f6",
+          "#60a5fa",
+          "#93c5fd",
+          "#bfdbfe",
+          "#dbeafe",
+          "#1d4ed8",
+        ],
+        borderWidth: 2,
+        borderColor: "#fff",
+      },
+    ],
+  };
 
-  const COLORS = [
-    "#2563eb",
-    "#3b82f6",
-    "#60a5fa",
-    "#93c5fd",
-    "#bfdbfe",
-    "#dbeafe",
-    "#1d4ed8",
-  ];
+  const lineChartData = {
+    labels,
+    datasets: [
+      {
+        label: "قيد المعالجة",
+        data: departments.map((dept) => dept.under_process_documents),
+        borderColor: "#3b82f6",
+        backgroundColor: "rgba(59, 130, 246, 0.1)",
+        tension: 0.4,
+        borderWidth: 3,
+        pointRadius: 5,
+        pointHoverRadius: 7,
+      },
+      {
+        label: "متأخرة",
+        data: departments.map((dept) => dept.under_process_late_documents),
+        borderColor: "#ef4444",
+        backgroundColor: "rgba(239, 68, 68, 0.1)",
+        tension: 0.4,
+        borderWidth: 3,
+        pointRadius: 5,
+        pointHoverRadius: 7,
+      },
+      {
+        label: "مغلقة",
+        data: departments.map((dept) => dept.closed_documents),
+        borderColor: "#10b981",
+        backgroundColor: "rgba(16, 185, 129, 0.1)",
+        tension: 0.4,
+        borderWidth: 3,
+        pointRadius: 5,
+        pointHoverRadius: 7,
+      },
+    ],
+  };
+
+  // Chart options
+  const chartOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        display: true,
+        position: "bottom",
+        rtl: true,
+        labels: {
+          padding: 15,
+          usePointStyle: true,
+          font: {
+            family: "Segoe UI, Tahoma, Geneva, Verdana, sans-serif",
+            size: 12,
+          },
+        },
+      },
+      tooltip: {
+        rtl: true,
+        backgroundColor: "white",
+        titleColor: "#1f2937",
+        bodyColor: "#6b7280",
+        borderColor: "#e5e7eb",
+        borderWidth: 1,
+        padding: 12,
+        displayColors: true,
+        boxPadding: 6,
+      },
+    },
+    scales: {
+      x: {
+        ticks: {
+          color: "#6b7280",
+          font: {
+            family: "Segoe UI, Tahoma, Geneva, Verdana, sans-serif",
+            size: 11,
+          },
+          maxRotation: 45,
+          minRotation: 45,
+        },
+        grid: {
+          display: false,
+        },
+      },
+      y: {
+        ticks: {
+          color: "#6b7280",
+          font: {
+            family: "Segoe UI, Tahoma, Geneva, Verdana, sans-serif",
+          },
+        },
+        grid: {
+          color: "#e5e7eb",
+        },
+      },
+    },
+  };
+
+  const pieOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        display: true,
+        position: "bottom",
+        rtl: true,
+        labels: {
+          padding: 15,
+          usePointStyle: true,
+          font: {
+            family: "Segoe UI, Tahoma, Geneva, Verdana, sans-serif",
+            size: 12,
+          },
+        },
+      },
+      tooltip: {
+        rtl: true,
+        backgroundColor: "white",
+        titleColor: "#1f2937",
+        bodyColor: "#6b7280",
+        borderColor: "#e5e7eb",
+        borderWidth: 1,
+        padding: 12,
+      },
+    },
+  };
 
   const handleExportSummary = () => {
     // Prepare summary data for export
@@ -87,7 +268,10 @@ const Dashboard = () => {
       "قيد المعالجة": dept.under_process_documents,
       متأخرة: dept.under_process_late_documents,
       مغلقة: dept.closed_documents,
-      الإجمالي: dept.under_process_documents + dept.closed_documents,
+      الإجمالي:
+        dept.under_process_documents +
+        dept.under_process_late_documents +
+        dept.closed_documents,
     }));
 
     // Create workbook and worksheet
@@ -107,13 +291,24 @@ const Dashboard = () => {
   return (
     <div className="space-y-8 animate-fadeIn">
       {/* Page Header */}
-      <div className="bg-gradient-to-r from-primary-600 to-primary-800 rounded-2xl shadow-xl p-8 text-white">
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-4xl font-bold">لوحة التحكم</h1>
-            <p className="text-primary-100 mt-2">
-              نظرة عامة على جميع الإدارات والوثائق
-            </p>
+      <div className="bg-gradient-to-r from-primary-600 to-primary-800 rounded-2xl shadow-xl p-8 text-white relative overflow-hidden">
+        {/* Background Pattern */}
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute top-0 left-0 w-64 h-64 bg-white rounded-full -translate-x-32 -translate-y-32"></div>
+          <div className="absolute bottom-0 right-0 w-96 h-96 bg-white rounded-full translate-x-32 translate-y-32"></div>
+        </div>
+
+        <div className="relative flex items-center justify-between">
+          <div className="flex items-center gap-6">
+            <div className="bg-white/20 backdrop-blur-sm p-5 rounded-2xl shadow-lg">
+              <LayoutDashboard size={48} className="text-white" />
+            </div>
+            <div>
+              <h1 className="text-4xl font-bold">لوحة التحكم</h1>
+              <p className="text-primary-100 mt-2 text-lg">
+                نظرة عامة على جميع الإدارات والوثائق
+              </p>
+            </div>
           </div>
           <button
             onClick={handleExportSummary}
@@ -134,7 +329,7 @@ const Dashboard = () => {
                 إجمالي الوثائق
               </p>
               <p className="text-4xl font-bold text-gray-800 mt-2">
-                {totalStats.underProcess + totalStats.closed}
+                {totalStats.underProcess + totalStats.late + totalStats.closed}
               </p>
               <p className="text-xs text-gray-500 mt-1">جميع الإدارات</p>
             </div>
@@ -204,35 +399,9 @@ const Dashboard = () => {
               </p>
             </div>
           </div>
-          <ResponsiveContainer width="100%" height={320}>
-            <BarChart data={barChartData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-              <XAxis
-                dataKey="name"
-                angle={-45}
-                textAnchor="end"
-                height={100}
-                tick={{ fill: "#6b7280", fontSize: 12 }}
-              />
-              <YAxis tick={{ fill: "#6b7280" }} />
-              <Tooltip
-                contentStyle={{
-                  backgroundColor: "white",
-                  border: "1px solid #e5e7eb",
-                  borderRadius: "8px",
-                  boxShadow: "0 4px 6px rgba(0,0,0,0.1)",
-                }}
-              />
-              <Legend wrapperStyle={{ paddingTop: "20px" }} />
-              <Bar
-                dataKey="قيد المعالجة"
-                fill="#3b82f6"
-                radius={[8, 8, 0, 0]}
-              />
-              <Bar dataKey="متأخرة" fill="#ef4444" radius={[8, 8, 0, 0]} />
-              <Bar dataKey="مغلقة" fill="#10b981" radius={[8, 8, 0, 0]} />
-            </BarChart>
-          </ResponsiveContainer>
+          <div style={{ height: "380px" }}>
+            <Bar data={barChartData} options={chartOptions} />
+          </div>
         </div>
 
         {/* Pie Chart */}
@@ -247,37 +416,9 @@ const Dashboard = () => {
               </p>
             </div>
           </div>
-          <ResponsiveContainer width="100%" height={320}>
-            <PieChart>
-              <Pie
-                data={pieChartData}
-                cx="50%"
-                cy="50%"
-                labelLine={false}
-                label={({ name, percent }) =>
-                  `${name}: ${(percent * 100).toFixed(0)}%`
-                }
-                outerRadius={90}
-                fill="#8884d8"
-                dataKey="value"
-              >
-                {pieChartData.map((entry, index) => (
-                  <Cell
-                    key={`cell-${index}`}
-                    fill={COLORS[index % COLORS.length]}
-                  />
-                ))}
-              </Pie>
-              <Tooltip
-                contentStyle={{
-                  backgroundColor: "white",
-                  border: "1px solid #e5e7eb",
-                  borderRadius: "8px",
-                  boxShadow: "0 4px 6px rgba(0,0,0,0.1)",
-                }}
-              />
-            </PieChart>
-          </ResponsiveContainer>
+          <div style={{ height: "380px" }}>
+            <Pie data={pieChartData} options={pieOptions} />
+          </div>
         </div>
       </div>
 
@@ -287,40 +428,13 @@ const Dashboard = () => {
           <div>
             <h2 className="text-xl font-bold text-gray-800">اتجاه الوثائق</h2>
             <p className="text-sm text-gray-500 mt-1">
-              إجمالي الوثائق لكل إدارة
+              توزيع الوثائق حسب الحالة لكل إدارة
             </p>
           </div>
         </div>
-        <ResponsiveContainer width="100%" height={320}>
-          <LineChart data={lineChartData}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-            <XAxis
-              dataKey="name"
-              angle={-45}
-              textAnchor="end"
-              height={100}
-              tick={{ fill: "#6b7280", fontSize: 12 }}
-            />
-            <YAxis tick={{ fill: "#6b7280" }} />
-            <Tooltip
-              contentStyle={{
-                backgroundColor: "white",
-                border: "1px solid #e5e7eb",
-                borderRadius: "8px",
-                boxShadow: "0 4px 6px rgba(0,0,0,0.1)",
-              }}
-            />
-            <Legend wrapperStyle={{ paddingTop: "20px" }} />
-            <Line
-              type="monotone"
-              dataKey="الوثائق"
-              stroke="#2563eb"
-              strokeWidth={3}
-              dot={{ fill: "#2563eb", r: 5 }}
-              activeDot={{ r: 7 }}
-            />
-          </LineChart>
-        </ResponsiveContainer>
+        <div style={{ height: "380px" }}>
+          <Line data={lineChartData} options={chartOptions} />
+        </div>
       </div>
 
       {/* Department Summary */}
@@ -345,42 +459,54 @@ const Dashboard = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200 bg-white">
-              {departments.map((dept, index) => (
-                <tr
-                  key={dept.dept_no}
-                  className="hover:bg-primary-50 transition-colors duration-150"
-                  style={{ animationDelay: `${index * 0.05}s` }}
-                >
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="flex items-center">
-                      <div className="w-2 h-2 rounded-full bg-primary-500 ml-3"></div>
-                      <span className="text-sm font-semibold text-gray-900">
-                        {dept.dept_name_ar}
+              {departments.map((dept, index) => {
+                const config = departmentConfig[dept.dept_name];
+                const DeptIcon = config?.icon;
+
+                return (
+                  <tr
+                    key={dept.dept_no}
+                    className="hover:bg-primary-50 transition-colors duration-150 cursor-pointer group"
+                    style={{ animationDelay: `${index * 0.05}s` }}
+                    onClick={() => navigate(config?.route)}
+                  >
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="flex items-center gap-3 transition-colors">
+                        {DeptIcon && (
+                          <div className="bg-primary-100 p-2 rounded-lg group-hover:bg-primary-200 transition-colors">
+                            <DeptIcon size={20} className="text-primary-600" />
+                          </div>
+                        )}
+                        <span className="text-sm font-semibold text-gray-900 group-hover:text-primary-600 transition-colors">
+                          {dept.dept_name_ar}
+                        </span>
+                      </div>
+                    </td>
+                    <td className="table-cell">
+                      <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                        {dept.under_process_documents}
                       </span>
-                    </div>
-                  </td>
-                  <td className="table-cell">
-                    <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                      {dept.under_process_documents}
-                    </span>
-                  </td>
-                  <td className="table-cell">
-                    <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800">
-                      {dept.under_process_late_documents}
-                    </span>
-                  </td>
-                  <td className="table-cell">
-                    <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                      {dept.closed_documents}
-                    </span>
-                  </td>
-                  <td className="table-cell">
-                    <span className="text-sm font-bold text-gray-900">
-                      {dept.under_process_documents + dept.closed_documents}
-                    </span>
-                  </td>
-                </tr>
-              ))}
+                    </td>
+                    <td className="table-cell">
+                      <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                        {dept.under_process_late_documents}
+                      </span>
+                    </td>
+                    <td className="table-cell">
+                      <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                        {dept.closed_documents}
+                      </span>
+                    </td>
+                    <td className="table-cell">
+                      <span className="text-sm font-bold text-gray-900">
+                        {dept.under_process_documents +
+                          dept.under_process_late_documents +
+                          dept.closed_documents}
+                      </span>
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>

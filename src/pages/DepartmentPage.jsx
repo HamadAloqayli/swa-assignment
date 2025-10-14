@@ -12,7 +12,7 @@ import {
 import * as XLSX from "xlsx";
 import Pagination from "../components/Pagination";
 
-const DepartmentPage = ({ department }) => {
+const DepartmentPage = ({ department, icon: Icon }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [sortBy, setSortBy] = useState("document_number");
   const [sortOrder, setSortOrder] = useState("asc");
@@ -146,11 +146,28 @@ const DepartmentPage = ({ department }) => {
   return (
     <div className="space-y-8 animate-fadeIn">
       {/* Page Header */}
-      <div className="bg-gradient-to-r from-primary-600 to-primary-800 rounded-2xl shadow-xl p-8 text-white">
-        <h1 className="text-4xl font-bold">{department.dept_name_ar}</h1>
-        <p className="text-primary-100 mt-2">
-          رقم الإدارة: {department.dept_no}
-        </p>
+      <div className="bg-gradient-to-r from-primary-600 to-primary-800 rounded-2xl shadow-xl p-8 text-white relative overflow-hidden">
+        {/* Background Pattern */}
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute top-0 left-0 w-64 h-64 bg-white rounded-full -translate-x-32 -translate-y-32"></div>
+          <div className="absolute bottom-0 right-0 w-96 h-96 bg-white rounded-full translate-x-32 translate-y-32"></div>
+        </div>
+
+        <div className="relative flex items-center justify-between">
+          <div className="flex items-center gap-6">
+            {Icon && (
+              <div className="bg-white/20 backdrop-blur-sm p-5 rounded-2xl shadow-lg">
+                <Icon size={48} className="text-white" />
+              </div>
+            )}
+            <div>
+              <h1 className="text-4xl font-bold">{department.dept_name_ar}</h1>
+              <p className="text-primary-100 mt-2 text-lg">
+                رقم الإدارة: {department.dept_no}
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Stats Cards */}

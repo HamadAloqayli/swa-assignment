@@ -34,7 +34,7 @@ const Sidebar = () => {
       {/* Logo */}
       <div className="p-6 border-b border-gray-200">
         <div className="flex items-center justify-center mb-3">
-          <img src={logo} alt="SWA Logo" className="h-20 w-20 object-contain" />
+          <img src={logo} alt="SWA Logo" className="h-24 w-24 object-contain" />
         </div>
         <h1 className="text-xl font-bold text-center text-gray-800">
           الهئية السعودية للمياه

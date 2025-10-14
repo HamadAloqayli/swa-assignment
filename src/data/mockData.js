@@ -298,11 +298,10 @@ export const departments = [
 ];
 
 export const user = {
-  name: "أحمد محمد",
-  position: "مدير النظام",
-  email: "ahmed.mohamed@company.sa",
-  phone: "+966 50 123 4567",
+  name: "حمد العقيلي",
+  position: "مهندس برمجيات",
+  email: "7mdx97@gmail.com",
+  phone: "+966 54 644 7065",
   department: "تقنية المعلومات",
-  avatar:
-    "https://ui-avatars.com/api/?name=أحمد+محمد&background=2563eb&color=fff&size=200",
+  avatar: "https://www.i7md.com/img/PersonalImage.jpg",
 };
