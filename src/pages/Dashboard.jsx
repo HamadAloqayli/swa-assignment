@@ -1,4 +1,10 @@
-import { departments } from "../data/mockData";
+import { it } from "../data/it";
+import { hr } from "../data/hr";
+import { finance } from "../data/finance";
+import { law } from "../data/law";
+import { pmo } from "../data/pmo";
+import { cyber } from "../data/cyber";
+import { audit } from "../data/audit";
 import {
   BarChart,
   Bar,
@@ -17,6 +23,17 @@ import {
 import { FileText, Clock, CheckCircle, AlertCircle } from "lucide-react";
 
 const Dashboard = () => {
+  // Combine all departments
+  const departments = [
+    it[0],
+    hr[0],
+    finance[0],
+    law[0],
+    pmo[0],
+    cyber[0],
+    audit[0],
+  ];
+
   // Calculate total stats
   const totalStats = departments.reduce(
     (acc, dept) => ({

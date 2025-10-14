@@ -1,8 +1,8 @@
 import DepartmentPage from "./DepartmentPage";
-import { departments } from "../data/mockData";
+import { audit } from "../data/audit";
 
 const AuditPage = () => {
-  const department = departments.find((d) => d.dept_name === "Internal Audit");
+  const department = audit[0];
   return <DepartmentPage department={department} />;
 };
 

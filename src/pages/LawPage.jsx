@@ -1,10 +1,8 @@
 import DepartmentPage from "./DepartmentPage";
-import { departments } from "../data/mockData";
+import { law } from "../data/law";
 
 const LawPage = () => {
-  const department = departments.find(
-    (d) => d.dept_name === "Law and Governance"
-  );
+  const department = law[0];
   return <DepartmentPage department={department} />;
 };
 

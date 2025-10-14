@@ -8,12 +8,15 @@ import {
   Filter,
   ArrowUpDown,
 } from "lucide-react";
+import Pagination from "../components/Pagination";
 
 const DepartmentPage = ({ department }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [sortBy, setSortBy] = useState("document_number");
   const [sortOrder, setSortOrder] = useState("asc");
   const [filterStatus, setFilterStatus] = useState("all");
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
 
   // Filter and sort documents
   const filteredDocuments = useMemo(() => {
@@ -59,8 +62,17 @@ const DepartmentPage = ({ department }) => {
       return 0;
     });
 
+    // Reset to first page when filters change
+    setCurrentPage(1);
+
     return filtered;
   }, [department.documents, searchTerm, sortBy, sortOrder, filterStatus]);
+
+  // Pagination calculations
+  const totalPages = Math.ceil(filteredDocuments.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const paginatedDocuments = filteredDocuments.slice(startIndex, endIndex);
 
   const getDocumentStatus = (doc) => {
     if (doc.closed_at) return "closed";
@@ -119,6 +131,7 @@ const DepartmentPage = ({ department }) => {
               </p>
               <p className="text-4xl font-bold text-gray-800 mt-2">
                 {department.under_process_documents +
+                  department.under_process_late_documents +
                   department.closed_documents}
               </p>
             </div>
@@ -241,10 +254,15 @@ const DepartmentPage = ({ department }) => {
 
       {/* Table Section */}
       <div className="card overflow-hidden">
-        <div className="bg-gradient-to-r from-primary-600 to-primary-700 px-6 py-4">
+        <div className="bg-gradient-to-r from-primary-600 to-primary-700 px-6 py-4 flex items-center justify-between">
           <h3 className="text-lg font-semibold text-white">
             الوثائق ({filteredDocuments.length})
           </h3>
+          {filteredDocuments.length > 0 && (
+            <span className="text-sm text-primary-100">
+              الصفحة {currentPage} من {totalPages}
+            </span>
+          )}
         </div>
         <div className="overflow-x-auto">
           <table className="w-full">
@@ -312,7 +330,7 @@ const DepartmentPage = ({ department }) => {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200 bg-white">
-              {filteredDocuments.map((doc, index) => (
+              {paginatedDocuments.map((doc, index) => (
                 <tr
                   key={doc.document_number}
                   className="hover:bg-primary-50 transition-colors duration-150"
@@ -359,6 +377,15 @@ const DepartmentPage = ({ department }) => {
             </p>
           </div>
         )}
+
+        {/* Pagination */}
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          totalItems={filteredDocuments.length}
+          itemsPerPage={itemsPerPage}
+          onPageChange={setCurrentPage}
+        />
       </div>
     </div>
   );
