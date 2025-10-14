@@ -247,14 +247,14 @@ const DepartmentPage = ({ department, icon: Icon }) => {
           </h3>
           <button
             onClick={handleExport}
-            className="btn-primary flex items-center gap-2 text-sm md:text-base px-4 md:px-6 w-full sm:w-auto justify-center"
+            className="btn-primary flex items-center gap-2 text-sm md:text-base px-4 md:px-6 w-full sm:w-auto justify-center cursor-pointer"
           >
             <Download size={18} className="md:w-5 md:h-5" />
             <span className="hidden sm:inline">تصدير Excel</span>
             <span className="sm:hidden">تصدير</span>
           </button>
         </div>
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col md:flex-row gap-4">
           {/* Search */}
           <div className="flex-1">
             <div className="relative">
@@ -273,9 +273,9 @@ const DepartmentPage = ({ department, icon: Icon }) => {
           </div>
 
           {/* Sort */}
-          <div className="flex gap-2 w-full">
+          <div className="flex gap-2">
             <select
-              className="input-field bg-white flex-1 text-sm md:text-base"
+              className="input-field bg-white min-w-[160px] text-sm md:text-base"
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value)}
             >
@@ -287,7 +287,7 @@ const DepartmentPage = ({ department, icon: Icon }) => {
             <button
               className="px-3 md:px-4 py-2 border border-gray-300 rounded-lg hover:bg-primary-50 hover:border-primary-300 transition-all duration-200"
               onClick={() => setSortOrder(sortOrder === "asc" ? "desc" : "asc")}
-              title={sortOrder === "اsc" ? "تصاعدي" : "تنازلي"}
+              title={sortOrder === "asc" ? "تصاعدي" : "تنازلي"}
             >
               <ArrowUpDown
                 size={18}
@@ -301,10 +301,10 @@ const DepartmentPage = ({ department, icon: Icon }) => {
           </div>
 
           {/* Filter */}
-          <div className="flex gap-2 items-center w-full">
+          <div className="flex gap-2 items-center">
             <Filter size={18} className="text-primary-600 hidden sm:block" />
             <select
-              className="input-field bg-white flex-1 text-sm md:text-base"
+              className="input-field bg-white min-w-[140px] text-sm md:text-base"
               value={filterStatus}
               onChange={(e) => setFilterStatus(e.target.value)}
             >

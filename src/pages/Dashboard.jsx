@@ -312,7 +312,7 @@ const Dashboard = () => {
           </div>
           <button
             onClick={handleExportSummary}
-            className="bg-white text-primary-600 px-6 py-3 rounded-lg font-medium hover:bg-primary-50 transition-all duration-200 flex items-center gap-2 shadow-lg"
+            className="bg-white text-primary-600 px-6 py-3 rounded-lg font-medium hover:bg-primary-50 transition-all duration-200 flex items-center gap-2 shadow-lg cursor-pointer"
           >
             <Download size={20} />
             تصدير الملخص
