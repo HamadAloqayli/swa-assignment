@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import logo from "../assets/swa_logo.jpg";
+import logo from "../assets/swa_logo.png";
 
 const Loading = ({ onLoadingComplete }) => {
   const [isLoading, setIsLoading] = useState(true);
@@ -21,7 +21,7 @@ const Loading = ({ onLoadingComplete }) => {
       <img
         src={logo}
         alt="SWA Logo"
-        className="h-40 w-40 object-contain animate-pulse"
+        className="h-48 w-48 object-contain animate-pulse"
       />
     </div>
   );

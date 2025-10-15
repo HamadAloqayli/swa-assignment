@@ -11,7 +11,7 @@ import {
   User,
 } from "lucide-react";
 import { user } from "../data/mockData";
-import logo from "../assets/swa_logo.jpg";
+import logo from "../assets/swa_logo.png";
 
 const Sidebar = ({ onClose }) => {
   const location = useLocation();
