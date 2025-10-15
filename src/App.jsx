@@ -1,5 +1,7 @@
+import { useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Layout from "./components/Layout";
+import Loading from "./components/Loading";
 import Dashboard from "./pages/Dashboard";
 import ITPage from "./pages/ITPage";
 import HRPage from "./pages/HRPage";
@@ -11,6 +13,16 @@ import AuditPage from "./pages/AuditPage";
 import ProfilePage from "./pages/ProfilePage";
 
 function App() {
+  const [isLoading, setIsLoading] = useState(true);
+
+  const handleLoadingComplete = () => {
+    setIsLoading(false);
+  };
+
+  if (isLoading) {
+    return <Loading onLoadingComplete={handleLoadingComplete} />;
+  }
+
   return (
     <BrowserRouter>
       <Routes>

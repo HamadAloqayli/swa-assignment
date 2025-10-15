@@ -298,42 +298,35 @@ const Dashboard = () => {
           <div className="absolute bottom-0 right-0 w-96 h-96 bg-white rounded-full translate-x-32 translate-y-32"></div>
         </div>
 
-        <div className="relative flex items-center justify-between">
-          <div className="flex items-center gap-6">
-            <div className="bg-white/20 backdrop-blur-sm p-5 rounded-2xl shadow-lg">
-              <LayoutDashboard size={48} className="text-white" />
-            </div>
-            <div>
-              <h1 className="text-4xl font-bold">لوحة التحكم</h1>
-              <p className="text-primary-100 mt-2 text-lg">
-                نظرة عامة على جميع الإدارات والوثائق
-              </p>
-            </div>
+        <div className="relative flex items-center gap-4 md:gap-6">
+          <div className="bg-white/20 backdrop-blur-sm p-3 md:p-5 rounded-2xl shadow-lg">
+            <LayoutDashboard size={36} className="text-white md:w-12 md:h-12" />
           </div>
-          <button
-            onClick={handleExportSummary}
-            className="bg-white text-primary-600 px-6 py-3 rounded-lg font-medium hover:bg-primary-50 transition-all duration-200 flex items-center gap-2 shadow-lg cursor-pointer"
-          >
-            <Download size={20} />
-            تصدير الملخص
-          </button>
+          <div>
+            <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold">
+              لوحة التحكم
+            </h1>
+            <p className="text-primary-100 mt-1 md:mt-2 text-sm md:text-base lg:text-lg">
+              نظرة عامة على جميع الإدارات والوثائق
+            </p>
+          </div>
         </div>
       </div>
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
-        <div className="stat-card border-r-4 border-primary-500 bg-gradient-to-br from-white to-primary-50">
+        <div className="stat-card border-r-4 border-purple-500 bg-gradient-to-br from-white to-purple-50">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-gray-600 text-xs md:text-sm font-medium">
                 إجمالي الوثائق
               </p>
-              <p className="text-3xl md:text-4xl font-bold text-gray-800 mt-2">
+              <p className="text-3xl md:text-4xl font-bold text-purple-600 mt-2">
                 {totalStats.underProcess + totalStats.late + totalStats.closed}
               </p>
               <p className="text-xs text-gray-500 mt-1">جميع الإدارات</p>
             </div>
-            <div className="bg-gradient-to-br from-primary-500 to-primary-600 p-3 md:p-4 rounded-xl shadow-lg">
+            <div className="bg-gradient-to-br from-purple-400 to-purple-600 p-3 md:p-4 rounded-xl shadow-lg">
               <FileText className="text-white" size={24} />
             </div>
           </div>
@@ -456,6 +449,14 @@ const Dashboard = () => {
               تفاصيل شاملة لجميع الإدارات
             </p>
           </div>
+          <button
+            onClick={handleExportSummary}
+            className="btn-primary flex items-center gap-2 text-sm md:text-base px-4 md:px-6 w-auto justify-center cursor-pointer"
+          >
+            <Download size={18} className="md:w-5 md:h-5" />
+            <span className="hidden sm:inline">تصدير الملخص</span>
+            <span className="sm:hidden">تصدير</span>
+          </button>
         </div>
         <div className="overflow-x-auto rounded-lg border border-gray-200 -mx-4 md:mx-0">
           <table className="w-full min-w-[600px]">

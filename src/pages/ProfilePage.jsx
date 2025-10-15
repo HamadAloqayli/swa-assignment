@@ -1,5 +1,14 @@
 import { user } from "../data/mockData";
-import { Mail, Phone, Briefcase, User as UserIcon } from "lucide-react";
+import {
+  Mail,
+  Phone,
+  Briefcase,
+  User as UserIcon,
+  Calendar,
+  MapPin,
+  Building,
+  Clock,
+} from "lucide-react";
 
 const ProfilePage = () => {
   return (
@@ -28,8 +37,8 @@ const ProfilePage = () => {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Profile Card */}
         <div className="lg:col-span-1">
-          <div className="card p-8">
-            <div className="flex flex-col items-center">
+          <div className="card p-8 h-full">
+            <div className="flex flex-col items-center mb-8">
               <div className="relative mb-6">
                 <img
                   src={user.avatar}
@@ -44,11 +53,41 @@ const ProfilePage = () => {
               <p className="text-primary-600 font-medium mt-2">
                 {user.position}
               </p>
-              <div className="mt-6 w-full border-t pt-6">
-                <div className="space-y-4">
-                  <div className="flex items-center gap-3 text-gray-700 bg-gray-50 p-3 rounded-lg">
-                    <Briefcase size={20} className="text-primary-600" />
-                    <span className="font-medium">{user.department}</span>
+            </div>
+
+            {/* Profile Content */}
+            <div className="flex-1 space-y-4">
+              {/* Personal Information */}
+              <div className="space-y-3">
+                <div className="flex items-center gap-3 text-gray-700 bg-gray-50 p-3 rounded-lg">
+                  <Calendar size={18} className="text-primary-600" />
+                  <div>
+                    <p className="text-xs text-gray-500">تاريخ الميلاد</p>
+                    <p className="text-sm font-medium">20 نوفمبر 1997</p>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-3 text-gray-700 bg-gray-50 p-3 rounded-lg">
+                  <MapPin size={18} className="text-primary-600" />
+                  <div>
+                    <p className="text-xs text-gray-500">المدينة</p>
+                    <p className="text-sm font-medium">الرياض</p>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-3 text-gray-700 bg-gray-50 p-3 rounded-lg">
+                  <Building size={18} className="text-primary-600" />
+                  <div>
+                    <p className="text-xs text-gray-500">المكتب</p>
+                    <p className="text-sm font-medium">الطابق الثالث - 301</p>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-3 text-gray-700 bg-gray-50 p-3 rounded-lg">
+                  <Clock size={18} className="text-primary-600" />
+                  <div>
+                    <p className="text-xs text-gray-500">ساعات العمل</p>
+                    <p className="text-sm font-medium">8:00 ص - 5:00 م</p>
                   </div>
                 </div>
               </div>
@@ -133,7 +172,7 @@ const ProfilePage = () => {
                   تاريخ الانضمام
                 </p>
                 <p className="text-lg text-gray-800 mt-2 font-bold">
-                  ٢٠٢٣/٠١/١٥
+                  2023/01/15
                 </p>
               </div>
               <div className="p-4 bg-green-50 rounded-xl">
