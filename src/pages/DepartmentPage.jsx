@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import {
   FileText,
   Clock,
@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 import * as XLSX from "xlsx";
 import Pagination from "../components/Pagination";
+import { useDataManager } from "../hooks/useDataManager";
 
 const DepartmentPage = ({ department, icon: Icon }) => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -37,8 +38,20 @@ const DepartmentPage = ({ department, icon: Icon }) => {
   });
   const [toast, setToast] = useState({ show: false, message: "", type: "" });
 
-  // Local documents state for editing
-  const [localDocuments, setLocalDocuments] = useState(department.documents);
+  // Use data manager hook
+  const {
+    data,
+    updateDocument,
+    deleteDocument: removeDocument,
+    getDepartment,
+  } = useDataManager();
+
+  // Get current department data from data manager - this will be reactive to data changes
+  const currentDepartment = useMemo(() => {
+    return getDepartment(department.dept_no) || department;
+  }, [data, department.dept_no]);
+
+  const localDocuments = currentDepartment.documents;
 
   // Filter and sort documents
   const filteredDocuments = useMemo(() => {
@@ -152,11 +165,11 @@ const DepartmentPage = ({ department, icon: Icon }) => {
     // Create workbook and worksheet
     const ws = XLSX.utils.json_to_sheet(exportData);
     const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, department.dept_name_ar);
+    XLSX.utils.book_append_sheet(wb, ws, currentDepartment.dept_name_ar);
 
     // Generate file name with department name and date
     const fileName = `${
-      department.dept_name_ar
+      currentDepartment.dept_name_ar
     }_${new Date().toLocaleDateString("ar-SA")}.xlsx`;
 
     // Export file
@@ -184,24 +197,27 @@ const DepartmentPage = ({ department, icon: Icon }) => {
 
   // Confirm delete
   const confirmDelete = (document) => {
-    setLocalDocuments((prev) =>
-      prev.filter((doc) => doc.document_number !== document.document_number)
+    const success = removeDocument(
+      department.dept_no,
+      document.document_number
     );
-    setDeleteModal({ isOpen: false, document: null });
-    showToast("تم حذف الوثيقة بنجاح", "success");
+    if (success) {
+      setDeleteModal({ isOpen: false, document: null });
+      showToast("تم حذف الوثيقة بنجاح", "success");
+    } else {
+      showToast("فشل في حذف الوثيقة", "error");
+    }
   };
 
   // Save edit
   const saveEdit = (updatedDocument) => {
-    setLocalDocuments((prev) =>
-      prev.map((doc) =>
-        doc.document_number === updatedDocument.document_number
-          ? updatedDocument
-          : doc
-      )
-    );
-    setEditModal({ isOpen: false, document: null });
-    showToast("تم تحديث الوثيقة بنجاح", "success");
+    const success = updateDocument(department.dept_no, updatedDocument);
+    if (success) {
+      setEditModal({ isOpen: false, document: null });
+      showToast("تم تحديث الوثيقة بنجاح", "success");
+    } else {
+      showToast("فشل في تحديث الوثيقة", "error");
+    }
   };
 
   const handlePrint = (document) => {
@@ -513,9 +529,9 @@ const DepartmentPage = ({ department, icon: Icon }) => {
                 إجمالي الوثائق
               </p>
               <p className="text-3xl md:text-4xl font-bold text-purple-600 mt-2">
-                {department.under_process_documents +
-                  department.under_process_late_documents +
-                  department.closed_documents}
+                {currentDepartment.under_process_documents +
+                  currentDepartment.under_process_late_documents +
+                  currentDepartment.closed_documents}
               </p>
             </div>
             <div className="bg-gradient-to-br from-purple-400 to-purple-600 p-3 md:p-4 rounded-xl shadow-lg">
@@ -531,7 +547,7 @@ const DepartmentPage = ({ department, icon: Icon }) => {
                 قيد المعالجة
               </p>
               <p className="text-3xl md:text-4xl font-bold text-blue-600 mt-2">
-                {department.under_process_documents}
+                {currentDepartment.under_process_documents}
               </p>
             </div>
             <div className="bg-gradient-to-br from-blue-400 to-blue-600 p-3 md:p-4 rounded-xl shadow-lg">
@@ -547,7 +563,7 @@ const DepartmentPage = ({ department, icon: Icon }) => {
                 متأخرة
               </p>
               <p className="text-3xl md:text-4xl font-bold text-red-600 mt-2">
-                {department.under_process_late_documents}
+                {currentDepartment.under_process_late_documents}
               </p>
             </div>
             <div className="bg-gradient-to-br from-red-400 to-red-600 p-3 md:p-4 rounded-xl shadow-lg">
@@ -563,7 +579,7 @@ const DepartmentPage = ({ department, icon: Icon }) => {
                 مغلقة
               </p>
               <p className="text-3xl md:text-4xl font-bold text-green-600 mt-2">
-                {department.closed_documents}
+                {currentDepartment.closed_documents}
               </p>
             </div>
             <div className="bg-gradient-to-br from-green-400 to-green-600 p-3 md:p-4 rounded-xl shadow-lg">
@@ -642,7 +658,9 @@ const DepartmentPage = ({ department, icon: Icon }) => {
               value={filterStatus}
               onChange={(e) => setFilterStatus(e.target.value)}
             >
-              <option value="all">الكل ({department.documents.length})</option>
+              <option value="all">
+                الكل ({currentDepartment.documents.length})
+              </option>
               <option value="open">قيد المعالجة</option>
               <option value="late">متأخرة</option>
               <option value="closed">مغلقة</option>
@@ -1050,6 +1068,19 @@ const EditModal = ({ document, onSave, onClose }) => {
     expired_at: document?.expired_at || "",
     closed_at: document?.closed_at || "",
   });
+
+  // Update form data when document changes
+  useEffect(() => {
+    if (document) {
+      setFormData({
+        subject: document.subject || "",
+        description: document.description || "",
+        created_at: document.created_at || "",
+        expired_at: document.expired_at || "",
+        closed_at: document.closed_at || "",
+      });
+    }
+  }, [document]);
 
   const handleSubmit = (e) => {
     e.preventDefault();

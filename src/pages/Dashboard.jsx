@@ -1,11 +1,6 @@
-import { it } from "../data/it";
-import { hr } from "../data/hr";
-import { finance } from "../data/finance";
-import { law } from "../data/law";
-import { pmo } from "../data/pmo";
-import { cyber } from "../data/cyber";
-import { audit } from "../data/audit";
 import { useNavigate } from "react-router-dom";
+import { useDataManager } from "../hooks/useDataManager";
+import DataPersistenceDemo from "../components/DataPersistenceDemo";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -51,17 +46,7 @@ ChartJS.register(
 
 const Dashboard = () => {
   const navigate = useNavigate();
-
-  // Combine all departments
-  const departments = [
-    it[0],
-    hr[0],
-    finance[0],
-    law[0],
-    pmo[0],
-    cyber[0],
-    audit[0],
-  ];
+  const { data: departments, getTotalStats } = useDataManager();
 
   // Department icons and routes mapping
   const departmentConfig = {
@@ -74,15 +59,8 @@ const Dashboard = () => {
     "Internal Audit": { icon: FileCheck, route: "/audit" },
   };
 
-  // Calculate total stats
-  const totalStats = departments.reduce(
-    (acc, dept) => ({
-      underProcess: acc.underProcess + dept.under_process_documents,
-      late: acc.late + dept.under_process_late_documents,
-      closed: acc.closed + dept.closed_documents,
-    }),
-    { underProcess: 0, late: 0, closed: 0 }
-  );
+  // Get total stats from data manager
+  const totalStats = getTotalStats();
 
   // Prepare data for Chart.js
   const labels = departments.map((dept) => dept.dept_name_ar);
@@ -437,6 +415,9 @@ const Dashboard = () => {
           <Line data={lineChartData} options={chartOptions} />
         </div>
       </div>
+
+      {/* Data Persistence Demo */}
+      {/* <DataPersistenceDemo /> */}
 
       {/* Department Summary */}
       <div className="card p-4 md:p-6">
